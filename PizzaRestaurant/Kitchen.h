@@ -9,13 +9,27 @@
 #import <Foundation/Foundation.h>
 #import "Pizza.h"
 
+@class Kitchen;
+
+@protocol KitchenDelegate <NSObject>
+
+- (BOOL)kitchen:(Kitchen *)kitchen shouldMakePizzaOfSize:(PizzaSize)size
+    andToppings:(NSArray *)toppings;
+
+- (BOOL)kitchenShouldUpgradeOrder:(Kitchen *)kitchen;
+
+@optional
+
+- (void)kitchenDidMakePizza:(Pizza *)pizza;
+
+@end
+
 @interface Kitchen : NSObject
 
-//PizzaSize is the enumerator , toppings is the array of toppings
--(Pizza *)makePizzaWithSize:(PizzaSize)size toppings:(NSArray *)toppings;
+@property (nonatomic,weak) id<KitchenDelegate> delegate;
 
++ (PizzaSize)parsePizzaSize:(NSString*)sizeString;
 
-
-
+- (Pizza *)makePizzaWithSize:(PizzaSize)size toppings:(NSArray *)toppings;
 
 @end
